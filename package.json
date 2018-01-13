@@ -1,0 +1,34 @@
+{
+  "name": "webapi",
+  "version": "1.0.0",
+  "description": "managing content for travelso.me",
+  "main": "server.js",
+  "scripts": {
+    "test": "console.log('checking server birth....')"
+  },
+  "author": "Rakib",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "config": "^1.29.2",
+    "cookie-parser": "^1.4.3",
+    "email-verification": "^0.4.6",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^4.3.0",
+    "forever": "^0.15.3",
+    "fs": "0.0.1-security",
+    "helmet": "^3.9.0",
+    "i18n": "^0.8.3",
+    "jade": "^1.11.0",
+    "jwt-simple": "^0.5.1",
+    "lusca": "^1.5.2",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.13.9",
+    "morgan": "^1.9.0",
+    "nodemailer": "^4.4.1",
+    "path": "^0.12.7",
+    "raw-body-parser": "0.0.2"
+  }
+}
