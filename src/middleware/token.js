@@ -1,25 +1,43 @@
+/**
+* Validates that the request contains a secret token.
+*
+* @module middleware
+*/
+
 var config = require('config');
 var jwt = require('jwt-simple');
 
 module.exports = function(req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    var token; // if possible get token from Bearer pattern, else take x-access-token
 
-  if (token) {
-    var payload = jwt.decode(token, config.jwtSecret)
-
-    if (payload == null) {
-      return res.status(401).json({
-        message: 'Unauthorized request.',
-        status: 401
-      });
+    var bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== 'undefined') {
+        // v3 authorization via Bearer Token
+        var bearer = bearerHeader.split(" "); // unpack the bearer token
+        token = bearer[1];
     } else {
-      req.user = payload;
-      next()
+        // v2 authorization via x-access-token
+        token = req.body.token || req.query.token || req.headers['x-access-token'];
     }
-  } else {
-    return res.status(403).json({
-      status: 403,
-      message: 'No token provided.'
-    });
-  }
+
+    // if a token is given --> proceed else throw error
+    if (token) {
+        var payload;
+
+        try {
+            payload = jwt.decode(token, config.jwtSecret);
+        }
+        catch (err) {
+            return res.end(res.writeHead(401, 'DECODE_ERR'));
+        }
+
+        if (payload == null) {
+            return res.end(res.writeHead(401, 'NO_PAYLOAD'));
+        } else {
+            req.payload = payload;
+            next()
+        }
+    } else {
+        return res.end(res.writeHead(403, 'NO_TOKEN'));
+    }
 }
